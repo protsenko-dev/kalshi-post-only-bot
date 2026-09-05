@@ -1,0 +1,28 @@
+# Every number the bot uses lives here. The code never hard-codes a strategy value.
+exchange:
+  demo: true                      # false = production
+allow_list:
+  series: [KXMLBGAME, KXNFLGAME]  # only markets under these series tickers are ever touched
+  tickers: []                     # optional exact tickers; empty = all open markets in the series
+entry:
+  price_low: 0.20                 # bid only when the market's yes bid is inside [price_low, price_high]
+  price_high: 0.35
+  bid_price: 0.22                 # the resting post-only bid price, dollars
+  order_size: 10                  # contracts per ticket
+  max_open_tickets: 1             # 1 to 4, distinct markets only; never a second ticket in the same market
+exit:
+  stop_price: 0.15                # when last trades at or through this, send the sell
+  resend_seconds: 2               # retry the IOC sell against the fresh bid until flat
+hours:
+  timezone: America/Phoenix
+  on: "09:00"
+  off: "23:00"
+alerts:
+  email: ""                       # or leave empty
+  telegram_bot_token_env: TELEGRAM_BOT_TOKEN   # read from the environment, not from this file
+  telegram_chat_id: ""
+control:
+  kill_file: /etc/kalshi/KILL     # drop this file to cancel all working bids and stop entries
+  log_csv: /var/log/kalshi/orders.csv
+  snapshot_on_entry: true
+  snapshot_on_stop: true
